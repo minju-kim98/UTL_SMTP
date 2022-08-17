@@ -21,7 +21,7 @@ begin
   for i in 1..tablen loop
 	list := list || tab(i) || ',';
   end loop;
-  list := rtrim(list, ',');
+  list := substr(list, 1, length(list)-1);
 end;
 /
 
@@ -37,6 +37,6 @@ begin
   for i in 1..tablen loop
 	list := list || tab(i) || ',';
   end loop;
-  list := rtrim(list, ',');
+  list := substr(list, 1, length(list)-1);
 end;
 /
