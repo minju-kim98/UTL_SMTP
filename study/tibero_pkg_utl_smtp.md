@@ -45,6 +45,12 @@ STMP 응답 라인
 | code              | 3-digit reply code            |
 | text              | reply text                    |
 
+**3. replies**</br>
+* Prototype
+```
+TYPE replies IS TABLE OF reply INDEX BY BINARY_INTEGER;
+```
+
 ## Functions and Procedures
 **1. CLOSE_DATA** </br>
 이메일 메시지를 종료
