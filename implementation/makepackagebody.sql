@@ -82,7 +82,7 @@ CREATE OR REPLACE PACKAGE "CLONE_UTL_SMTP" BODY AUTHID CURRENT_USER AS
   FUNCTION "HELO"(C       IN OUT NOCOPY CONNECTION,
                   DOMAIN  IN            VARCHAR2) RETURN REPLY
   IS
-   msg VARCHAR2(100) := 'helo ';
+   msg VARCHAR2(100) := 'HELO ';
    rc PLS_INTEGER;
   BEGIN
    msg := msg || DOMAIN;
@@ -92,14 +92,65 @@ CREATE OR REPLACE PACKAGE "CLONE_UTL_SMTP" BODY AUTHID CURRENT_USER AS
   END;
   
 
-
   PROCEDURE "HELO"(C       IN OUT NOCOPY CONNECTION,
                    DOMAIN  IN            VARCHAR2)
   IS
-   msg VARCHAR2(100) := 'helo ';
+   msg VARCHAR2(100) := 'HELO ';
    rc PLS_INTEGER;
   BEGIN
    msg := msg || DOMAIN;
+   rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
+  END;
+
+
+  FUNCTION "MAIL"(C          IN OUT NOCOPY CONNECTION,
+                  SENDER     IN            VARCHAR2,
+                  PARAMETERS IN            VARCHAR2 DEFAULT NULL) RETURN REPLY
+  IS
+   msg VARCHAR2(100) := 'MAIL FROM: ';
+   rc PLS_INTEGER;
+  BEGIN
+   msg := msg || SENDER;
+   rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
+   /*TODO*/
+   RETURN NULL;
+  END;
+
+
+  PROCEDURE "MAIL"(C          IN OUT NOCOPY CONNECTION,
+                   SENDER     IN            VARCHAR2,
+                   PARAMETERS IN            VARCHAR2 DEFAULT NULL)
+  IS
+   msg VARCHAR2(100) := 'MAIL FROM: ';
+   rc PLS_INTEGER;
+  BEGIN
+   msg := msg || SENDER;
+   rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
+  END;
+
+
+  FUNCTION "RCPT"(C          IN OUT NOCOPY CONNECTION,
+                  RECIPIENT  IN            VARCHAR2,
+                  PARAMETERS IN            VARCHAR2 DEFAULT NULL) RETURN REPLY
+  IS
+   msg VARCHAR2(100) := 'RCPT TO: ';
+   rc PLS_INTEGER;
+  BEGIN
+   msg := msg || RECIPIENT;
+   rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
+   /*TODO*/
+   RETURN NULL;
+  END;
+
+
+  PROCEDURE "RCPT"(C          IN OUT NOCOPY CONNECTION,
+                   RECIPIENT  IN            VARCHAR2,
+                   PARAMETERS IN            VARCHAR2 DEFAULT NULL)
+  IS
+   msg VARCHAR2(100) := 'RCPT TO: ';
+   rc PLS_INTEGER;
+  BEGIN
+   msg := msg || RECIPIENT;
    rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
   END;
 
