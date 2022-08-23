@@ -224,3 +224,19 @@ CREATE OR REPLACE PACKAGE "CLONE_UTL_SMTP" BODY AUTHID CURRENT_USER AS
   END;
 
 END;
+
+/*
+1. REPL
+* reply 구조체를 가져오는 동작(tcp에서 get_line하는 동작을 통해 가져올 수 있습니다.)이 누락되어있습니다.
+* REPLY가 오지 않아서 UTL_TCP.END_OF_INPUT나 UTL_TCP.NETWORK_ERROR 에러를 맞을 수 있는데 이에 대한 에러처리가 필요합니다.
+
+2. (TODO) WRITE 동작 전에는 현재 DATA 상태가 어떤지 체크하는 로직을 넣었음 좋겠습니다.
+
+3. 실제로 UTL_TCP.WRITE_LINE 에 넣는 데이터가 "COMMAND"+ " " + "내용" 요런 형태로 되어 있는데 이를 리팩토링해서 호출하는 프로시저 형태가 있음 좋겠습니다.
+
+4. MAIL은 MAIL FROM: 요런 형태로 쓰셨는데, 내부적으론 MAIL 형태로 되어있네요 한번 찾아보심 좋을 것 같습니다.
+
+5. WRITE_DATA만 많이 사용된 것 같은데, WRITE_TEXT 혹은 WRITE_LINE 등을 이용하는 방법도 있으니 비교해보면서 고민해보시면 좋을 것 같습니다.
+
+참고: https://somahhh.tistory.com/213
+*/
