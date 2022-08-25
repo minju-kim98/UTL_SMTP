@@ -369,7 +369,7 @@ UTL_SMTP.RSET
 이메일 주소를 유효성 확인하고 검증. 유효한 경우 수신인의 전체 이름 및 완전한 메일함이 리턴됨
 * Prototype
 ```
-UTL_SMTP.VRFY이메일 메시지를 종료
+UTL_SMTP.VRFY
 (
   C          IN OUT NOCOPY CONNECTION,
   RECIPIENT  IN            VARCHAR2
