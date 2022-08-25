@@ -42,8 +42,13 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
                                DATA IN VARCHAR2)
   IS
    rc PLS_INTEGER;
-   msg VARCHAR2(100) := COMMAND ||' '|| DATA;
+   msg VARCHAR2(100);
   BEGIN
+   IF DATA != NULL THEN
+    msg := COMMAND || ' ' || DATA;
+   ELSE
+    msg := COMMAND;
+   END IF;
    rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
   END;
 
