@@ -84,5 +84,5 @@ CREATE OR REPLACE PROCEDURE send_email
 /
 
 
-exec send_email('tibero@tmax.co.kr','ducco705@naver.com', 'From:' || '"tibero" <tibero@tmax.co.kr>'||UTL_TCP.CRLF || 'To:' || '"ducco705" <ducco705@naver.com>' || UTL_TCP.CRLF || 'Subject: Test' || UTL_TCP.CRLF || 'TestMail' || UTL_TCP.CRLF || '.' || UTL_TCP.CRLF);
+exec send_email('tibero@tmax.co.kr','ducco705@naver.com', 'TestMail');
 
