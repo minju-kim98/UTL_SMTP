@@ -1,3 +1,5 @@
+SET SERVEROUTPUT ON
+
 DECLARE
    t_host VARCHAR2(30) := 'localhost';
    t_port NUMBER := 25;
@@ -11,19 +13,19 @@ DECLARE
    c CLONE_UTL_SMTP.connection;
    reply_rset CLONE_UTL_SMTP.reply;
    reply_vrfy CLONE_UTL_SMTP.reply;
-   reply_help CLONE_UTL_SMTP.replies;
-   reply_command CLONE_UTL_SMTP.reply;
-   reply_command_replies CLONE_UTL_SMTP.replies;
+  --  reply_help CLONE_UTL_SMTP.replies;
+  --  reply_command CLONE_UTL_SMTP.reply;
+  --  reply_command_replies CLONE_UTL_SMTP.replies;
   BEGIN
     c := CLONE_UTL_SMTP.OPEN_CONNECTION(t_host,t_port);
     reply_vrfy := CLONE_UTL_SMTP.vrfy(c, 'ducco705@naver.com');
-    reply_help := CLONE_UTL_SMTP.help(c, 'HELP');
+    -- reply_help := CLONE_UTL_SMTP.help(c, 'HELP');
     -- reply_command := CLONE_UTL_SMTP.command(c, 'AUTH LOGIN');
     -- reply_command_replies := CLONE_UTL_SMTP.command_replies(c, 'AUTH','LOGIN');
     dbms_output.put_line('vrfy:'||reply_vrfy.code);
     dbms_output.put_line('vrfy:'||reply_vrfy.text);
-    dbms_output.put_line('help:'||reply_help(reply_help.count).code);
-    dbms_output.put_line('help:'||reply_help(reply_help.count).text);
+    -- dbms_output.put_line('help:'||reply_help(reply_help.count).code);
+    -- dbms_output.put_line('help:'||reply_help(reply_help.count).text);
 --     dbms_output.put_line('command:'||reply_command.code);
 --     dbms_output.put_line('command:'||reply_command.text);
 --     dbms_output.put_line('command_replies:'||reply_command_replies(
@@ -40,19 +42,15 @@ DECLARE
     CLONE_UTL_SMTP.MAIL(c, t_from);
     CLONE_UTL_SMTP.RCPT(c, t_to);
 
-    --reply_rset := CLONE_UTL_SMTP.rset(c);
-    --dbms_output.put_line('rset:'||reply_rset.code);
-    --dbms_output.put_line('rset:'||reply_rset.text);
-
-    -- CLONE_UTL_SMTP.OPEN_DATA(c);
-    -- CLONE_UTL_SMTP.WRITE_DATA(c,'From:' || '"tibero" <tibero@tmax.co.kr>' || UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.WRITE_DATA(c,'To:' || '"ducco705" <ducco705@naver.com>' || UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(''|| t_intro||''|| UTL_TCP.CRLF));
-    -- CLONE_UTL_SMTP.WRITE_DATA(c,'Subject: Test' || UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.WRITE_DATA(c, UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST1' || UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.CLOSE_DATA(c);
-    -- CLONE_UTL_SMTP.QUIT(c);
+    CLONE_UTL_SMTP.OPEN_DATA(c);
+    CLONE_UTL_SMTP.WRITE_DATA(c,'From:' || '"tibero" <tibero@tmax.co.kr>' || UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.WRITE_DATA(c,'To:' || '"ducco705" <ducco705@naver.com>' || UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(''|| t_intro||''|| UTL_TCP.CRLF));
+    CLONE_UTL_SMTP.WRITE_DATA(c,'Subject: Test' || UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.WRITE_DATA(c, UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST1' || UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.CLOSE_DATA(c);
+    CLONE_UTL_SMTP.QUIT(c);
 
   EXCEPTION
     WHEN CLONE_UTL_SMTP.transient_error OR CLONE_UTL_SMTP.permanent_error THEN
@@ -85,6 +83,6 @@ CREATE OR REPLACE PROCEDURE send_email
      END;
 /
 
-/*
-SQL> exec send_email('tibero@tmax.co.kr','ducco705@naver.com', 'This sample is education purpose only');
-*/
+
+exec send_email('tibero@tmax.co.kr','ducco705@naver.com', 'From:' || '"tibero" <tibero@tmax.co.kr>'||UTL_TCP.CRLF || 'To:' || '"ducco705" <ducco705@naver.com>' || UTL_TCP.CRLF || 'Subject: Test' || UTL_TCP.CRLF || 'TestMail' || UTL_TCP.CRLF || '.' || UTL_TCP.CRLF);
+
