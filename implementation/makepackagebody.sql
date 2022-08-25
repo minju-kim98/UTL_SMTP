@@ -44,10 +44,10 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    rc PLS_INTEGER;
    msg VARCHAR2(100);
   BEGIN
-   IF DATA != NULL THEN
-    msg := COMMAND || ' ' || DATA;
+   IF DATA IS NULL THEN
+    msg := COMMAND || DATA;
    ELSE
-    msg := COMMAND;
+    msg := COMMAND || ' ' || DATA;
    END IF;
    rc := UTL_TCP.WRITE_LINE(C.private_tcp_con, msg);
   END;
