@@ -220,9 +220,9 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    rep reply;
   BEGIN
    OPEN_DATA(C);
-   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY" || UTL_TCP.CRLF || '.' || UTL_TCP.CRLF);
-   rep := GET_REPLY(C);
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
    CLOSE_DATA(C);
+   rep := GET_REPLY(C);
    RETURN rep;
   END;
 
@@ -233,9 +233,9 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    rc PLS_INTEGER;
   BEGIN
    OPEN_DATA(C);
-   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY" || UTL_TCP.CRLF || '.' || UTL_TCP.CRLF);
-   GET_REPLY(C);
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
    CLOSE_DATA(C);
+   GET_REPLY(C);
   END;
 
 
