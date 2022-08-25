@@ -207,6 +207,33 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
   END;
 
 
+  FUNCTION "DATA"(C     IN OUT NOCOPY CONNECTION,
+                  "BODY"  IN            VARCHAR2 )
+                  RETURN REPLY
+  IS
+   rc PLS_INTEGER;
+   rep reply;
+  BEGIN
+   OPEN_DATA(C);
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
+   rep := GET_REPLY(C);
+   CLOSE_DATA(C);
+   RETURN rep;
+  END;
+
+
+  PROCEDURE "DATA"(C     IN OUT NOCOPY CONNECTION,
+                   "BODY"  IN            VARCHAR2 )
+  IS
+   rc PLS_INTEGER;
+  BEGIN
+   OPEN_DATA(C);
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
+   GET_REPLY(C);
+   CLOSE_DATA(C);
+  END;
+
+
   FUNCTION "OPEN_DATA"(C IN OUT NOCOPY CONNECTION) RETURN REPLY 
   IS
   BEGIN
@@ -252,18 +279,27 @@ IS
   FUNCTION "CLOSE_DATA"(C IN OUT NOCOPY CONNECTION) RETURN REPLY
   IS
   BEGIN
-   WRITE_COMMAND_LINE(C, '.', NULL);
-   C.private_state := NULL;
-   RETURN GET_REPLY(C);
+   IF C.private_state = 1 THEN
+    WRITE_COMMAND_LINE(C, '.', NULL);
+    C.private_state := NULL;
+    RETURN GET_REPLY(C);
+   ELSE
+    DBMS_OUTPUT.PUT_LINE('ERROR: DATA NOT OPENED');
+    RETURN NULL;
+   END IF;
   END;
 
   
   PROCEDURE "CLOSE_DATA"(C IN OUT NOCOPY CONNECTION)
   IS
   BEGIN
-   WRITE_COMMAND_LINE(C, '.', NULL);
-   C.private_state := NULL;
-   GET_REPLY(C);
+   IF C.private_state = 1 THEN
+    WRITE_COMMAND_LINE(C, '.', NULL);
+    C.private_state := NULL;
+    GET_REPLY(C);
+   ELSE
+    DBMS_OUTPUT.PUT_LINE('ERROR: DATA NOT OPENED');
+   END IF;
   END;
 
 

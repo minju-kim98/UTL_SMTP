@@ -81,11 +81,11 @@ CREATE OR REPLACE PACKAGE "CLONE_UTL_SMTP" AUTHID CURRENT_USER AS
                    RECIPIENT  IN            VARCHAR2,
                    PARAMETERS IN            VARCHAR2 DEFAULT NULL);
 
-  /*FUNCTION "DATA"(C     IN OUT NOCOPY CONNECTION,
+  FUNCTION "DATA"(C     IN OUT NOCOPY CONNECTION,
                   "BODY"  IN            VARCHAR2 )
                   RETURN REPLY;
   PROCEDURE "DATA"(C     IN OUT NOCOPY CONNECTION,
-                   "BODY"  IN            VARCHAR2 );*/
+                   "BODY"  IN            VARCHAR2 );
 
   FUNCTION "OPEN_DATA"(C IN OUT NOCOPY CONNECTION) RETURN REPLY;
  
