@@ -10,7 +10,10 @@ DECLARE
 
 
 BEGIN
-    c := CLONE_UTL_SMTP.OPEN_CONNECTION(vv_host, vn_port);
+    c := CLONE_UTL_SMTP.OPEN_CONNECTION(
+        HOST => vv_host, 
+        PORT => vn_port,
+        TX_TIMEOUT => 30);
 
     CLONE_UTL_SMTP.HELO(c, vv_domain);
 
@@ -23,7 +26,8 @@ BEGIN
     CLONE_UTL_SMTP.WRITE_DATA(c,'To: ' || '"minju" <ducco705@naver.com>' || UTL_TCP.CRLF );   -- 받는사람
     CLONE_UTL_SMTP.WRITE_DATA(c,'Subject: Test' || UTL_TCP.CRLF );                                                   -- 제목
     CLONE_UTL_SMTP.WRITE_DATA(c, UTL_TCP.CRLF );  -- 한 줄 띄우기
-    CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST1 ' || UTL_TCP.CRLF );  -- 본문
+    CLONE_UTL_SMTP.WRITE_RAW_DATA(c, UTL_RAW.CAST_TO_RAW('Test Raw Data' || UTL_TCP.CRLF));
+    CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST2 ' || UTL_TCP.CRLF );  -- 본문
 
     CLONE_UTL_SMTP.CLOSE_DATA(c); -- 메일 본문 작성 종료. SMTP 명령어의 “.” 역할
 
