@@ -28,7 +28,7 @@ DECLARE
     dbms_output.put_line('rset:'||reply_rset.code);
     dbms_output.put_line('rset:'||reply_rset.text);
 
-    CLONE_UTL_SMTP.HELO(c, t_domain);
+    CLONE_UTL_SMTP.HELO(c, t_domain); --CLONE_UTL_SMTP.EHLO(c, t_domain);
     CLONE_UTL_SMTP.NOOP(c);
     CLONE_UTL_SMTP.MAIL(c, t_from);
     CLONE_UTL_SMTP.RCPT(c, t_to);
@@ -39,7 +39,7 @@ DECLARE
     CLONE_UTL_SMTP.WRITE_DATA(c,'Subject: Test' || UTL_TCP.CRLF);
     CLONE_UTL_SMTP.WRITE_DATA(c, UTL_TCP.CRLF);
     CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST1' || UTL_TCP.CRLF);
-    CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(''|| t_intro||''|| UTL_TCP.CRLF));
+    CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(UTL_TCP.CRLF || ''|| t_intro||''|| UTL_TCP.CRLF));
     CLONE_UTL_SMTP.CLOSE_DATA(c);
     CLONE_UTL_SMTP.QUIT(c);
 
