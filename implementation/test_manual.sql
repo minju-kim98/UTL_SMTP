@@ -79,5 +79,5 @@ CREATE OR REPLACE PROCEDURE send_email
 /
 
 
-exec send_email('tibero@tmax.co.kr','ducco705@snu.ac.kr', 'THIS IS SMTP_TEST2');
+exec send_email('tibero@tmax.co.kr','ducco705@snu.ac.kr', 'Subject: Final Test' || UTL_TCP.CRLF || 'THIS IS FINAL TEST FOR UTL_SMTP');
 
