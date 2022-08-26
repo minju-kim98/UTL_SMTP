@@ -18,7 +18,7 @@ DECLARE
     c := CLONE_UTL_SMTP.OPEN_CONNECTION(
       HOST => t_host,
       PORT => t_port,
-      TX_TIMEOUT => 5);
+      TX_TIMEOUT => 2);
     reply_vrfy := CLONE_UTL_SMTP.vrfy(c, 'ducco705@snu.ac.kr');
 
     dbms_output.put_line('vrfy:'||reply_vrfy.code);
@@ -68,20 +68,16 @@ CREATE OR REPLACE PROCEDURE send_email
          c := CLONE_UTL_SMTP.open_connection(
           HOST => mailhost,
           PORT => 25,
-          TX_TIMEOUT => 5); 
+          TX_TIMEOUT => 2); 
          CLONE_UTL_SMTP.helo(c,mailhost); 
-         dbms_output.put_line('0');
          CLONE_UTL_SMTP.mail(c,sender); 
-         dbms_output.put_line('1');
          CLONE_UTL_SMTP.rcpt(c,recipient); 
-         dbms_output.put_line('2');
-         CLONE_UTL_SMTP.data(c,message); 
-         dbms_output.put_line('3');
+         CLONE_UTL_SMTP.data(c, message); 
          CLONE_UTL_SMTP.quit(c);
-         dbms_output.put_line('4');
+
      END;
 /
 
 
-exec send_email('tibero@tmax.co.kr','ducco705@naver.com', 'This is the TestMail');
+exec send_email('tibero@tmax.co.kr','ducco705@snu.ac.kr', 'THIS IS SMTP_TEST2');
 
