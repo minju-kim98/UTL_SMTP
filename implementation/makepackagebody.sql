@@ -119,7 +119,7 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    c_smtp connection;
    c_tcp UTL_TCP.connection;
   BEGIN
-   c_tcp := UTL_TCP.OPEN_CONNECTION(HOST, PORT);
+   c_tcp := UTL_TCP.OPEN_CONNECTION(HOST, PORT, TX_TIMEOUT);
    c_smtp.host := HOST;
    c_smtp.port := PORT;
    c_smtp.tx_timeout := TX_TIMEOUT;
@@ -138,7 +138,7 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    c_smtp connection;
    c_tcp UTL_TCP.connection;
   BEGIN
-   c_tcp := UTL_TCP.OPEN_CONNECTION(HOST, PORT);
+   c_tcp := UTL_TCP.OPEN_CONNECTION(HOST, PORT, TX_TIMEOUT);
    c_smtp.host := HOST;
    c_smtp.port := PORT;
    c_smtp.tx_timeout := TX_TIMEOUT;
@@ -236,7 +236,7 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    rep reply;
   BEGIN
    OPEN_DATA(C);
-   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY" || UTL_TCP.CRLF);
    CLOSE_DATA(C);
    rep := GET_LAST_REPLY(C);
    RETURN rep;
@@ -249,7 +249,7 @@ CREATE OR REPLACE PACKAGE BODY "CLONE_UTL_SMTP" AS
    rc PLS_INTEGER;
   BEGIN
    OPEN_DATA(C);
-   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY");
+   rc := UTL_TCP.WRITE_TEXT(C.private_tcp_con, "BODY" || UTL_TCP.CRLF);
    CLOSE_DATA(C);
    GET_REPLY(C);
   END;
@@ -301,7 +301,7 @@ IS
   IS
   BEGIN
    IF C.private_state = 1 THEN
-    WRITE_COMMAND_LINE(C, '.', NULL);
+    WRITE_COMMAND_LINE(C, '.' ||  UTL_TCP.CRLF, NULL);
     C.private_state := NULL;
     RETURN GET_LAST_REPLY(C);
    ELSE
@@ -315,7 +315,7 @@ IS
   IS
   BEGIN
    IF C.private_state = 1 THEN
-    WRITE_COMMAND_LINE(C, '.', NULL);
+    WRITE_COMMAND_LINE(C, '.' ||  UTL_TCP.CRLF, NULL);
     C.private_state := NULL;
     GET_REPLY(C);
    ELSE
