@@ -15,7 +15,10 @@ DECLARE
    reply_vrfy CLONE_UTL_SMTP.reply;
 
   BEGIN
-    c := CLONE_UTL_SMTP.OPEN_CONNECTION(t_host,t_port);
+    c := CLONE_UTL_SMTP.OPEN_CONNECTION(
+      HOST => t_host,
+      PORT => t_port,
+      TX_TIMEOUT => 5);
     reply_vrfy := CLONE_UTL_SMTP.vrfy(c, 'ducco705@snu.ac.kr');
 
     dbms_output.put_line('vrfy:'||reply_vrfy.code);
@@ -33,10 +36,10 @@ DECLARE
     CLONE_UTL_SMTP.OPEN_DATA(c);
     CLONE_UTL_SMTP.WRITE_DATA(c,'From:' || '"tibero" <tibero@tmax.co.kr>' || UTL_TCP.CRLF);
     CLONE_UTL_SMTP.WRITE_DATA(c,'To: ' || '"minju_kim" <ducco705@snu.ac.kr>' || UTL_TCP.CRLF);
-    -- CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(''|| t_intro||''|| UTL_TCP.CRLF));
     CLONE_UTL_SMTP.WRITE_DATA(c,'Subject: Test' || UTL_TCP.CRLF);
     CLONE_UTL_SMTP.WRITE_DATA(c, UTL_TCP.CRLF);
     CLONE_UTL_SMTP.WRITE_DATA(c,'THIS IS SMTP_TEST1' || UTL_TCP.CRLF);
+    CLONE_UTL_SMTP.WRITE_RAW_DATA( c, UTL_RAW.CAST_TO_RAW(''|| t_intro||''|| UTL_TCP.CRLF));
     CLONE_UTL_SMTP.CLOSE_DATA(c);
     CLONE_UTL_SMTP.QUIT(c);
 
@@ -62,12 +65,20 @@ CREATE OR REPLACE PROCEDURE send_email
         mailhost VARCHAR2(100) := 'localhost';
         c CLONE_UTL_SMTP.connection;
       BEGIN
-         c := CLONE_UTL_SMTP.open_connection(mailhost,25); 
+         c := CLONE_UTL_SMTP.open_connection(
+          HOST => mailhost,
+          PORT => 25,
+          TX_TIMEOUT => 5); 
          CLONE_UTL_SMTP.helo(c,mailhost); 
+         dbms_output.put_line('0');
          CLONE_UTL_SMTP.mail(c,sender); 
+         dbms_output.put_line('1');
          CLONE_UTL_SMTP.rcpt(c,recipient); 
+         dbms_output.put_line('2');
          CLONE_UTL_SMTP.data(c,message); 
+         dbms_output.put_line('3');
          CLONE_UTL_SMTP.quit(c);
+         dbms_output.put_line('4');
      END;
 /
 
